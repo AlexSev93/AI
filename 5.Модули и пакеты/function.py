@@ -1,16 +1,15 @@
 import os
 import shutil
 import sys
+import platform
 
 
-def crate_dir():
-    name_dir = input('Ввести имя новой папки- ')
-    os.mkdir(name_dir)
+def crate_dir(name):
+    os.mkdir(name)
 
 
-def del_file_dir():
+def del_file_dir(name):
     dir_main = os.getcwd()
-    name = input('Ввести имя папки или файла для удаления - ')
     lis = os.listdir(dir_main)
     if name in lis:
         if os.path.isfile(f'{dir_main}/{name}'):
@@ -21,12 +20,10 @@ def del_file_dir():
         print('Нет совпадения')
 
 
-def copy():
+def copy(name, name_new):
     dir_main = os.getcwd()
-    name = input('Ввести имя папки или файла для копирования - ')
     lis = os.listdir(dir_main)
     if name in lis:
-        name_new = input('Ввести новое имя для копии - ')
         if os.path.isfile(f'{dir_main}/{name}'):
             shutil.copyfile(name, name_new)
         elif os.path.isdir(f'{dir_main}/{name}'):
@@ -38,30 +35,37 @@ def copy():
 def get_input():
     dir_main = os.getcwd()
     lis = os.listdir(dir_main)
+    st = []
     for i in lis:
-        print(i)
+        st.append(i)
+    return st
 
 
 def get_dir():
     dir_main = os.getcwd()
     lis = os.listdir(dir_main)
+    st = []
     for i in lis:
         if os.path.isdir(f'{dir_main}/{i}'):
-            print(i)
+            st.append(i)
+    return st
 
 
 def get_file():
     dir_main = os.getcwd()
     lis = os.listdir(dir_main)
+    st = []
     for i in lis:
         if os.path.isfile(f'{dir_main}/{i}'):
-            print(i)
+            st.append(i)
+    return st
 
 
 def info_os():
-    print(os.name)
-    print(sys.platform)
+    st = [os.name, sys.platform]
+    return st
 
 
 def about():
-    print(os.stat('main_consol.py'))
+    return platform.node()
+

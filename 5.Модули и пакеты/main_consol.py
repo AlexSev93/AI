@@ -1,6 +1,5 @@
 import function as fc
 import sys
-import os
 
 print('1- создать папку;                                    ')
 print('2- удалить (файл/папку);                             ')
@@ -18,21 +17,25 @@ print('12- выход.                                            ')
 while True:
     menu = int(input('Выбрать номер меню - '))
     if menu == 1:
-        fc.crate_dir()
+        name = input('Ввести имя новой папки- ')
+        fc.crate_dir(name)
     elif menu == 2:
-        fc.del_file_dir()
+        name = input('Ввести имя папки или файла для удаления - ')
+        fc.del_file_dir(name)
     elif menu == 3:
-        fc.copy()
+        name = input('Ввести имя папки или файла для копирования - ')
+        name_new = input('Ввести новое имя для копии - ')
+        fc.copy(name, name_new)
     elif menu == 4:
-        fc.get_input()
+        print(fc.get_input())
     elif menu == 5:
-        fc.get_dir()
+        print(fc.get_dir())
     elif menu == 6:
-        fc.get_file()
+        print(fc.get_file())
     elif menu == 7:
-        fc.info_os()
+        print(fc.info_os())
     elif menu == 8:
-        fc.about()
+        print(fc.about())
     elif menu == 9:
         sys.path.append('../3_list,str,set,turple')
         import victory

@@ -1,0 +1,2 @@
+files: big_obj.data, function_for_consol.py, info.data, list_dir.data, main_consol.py, pickle_example.py, use_functions.py
+dirs: __pycache__

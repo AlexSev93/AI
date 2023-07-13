@@ -1,5 +1,7 @@
 import sys
 
+sys.path.append('../5_ModulesPackage')
+
 from function import get_file, get_input, get_dir, about, crate_dir, del_file_dir, info_os, copy
 import os
 import platform

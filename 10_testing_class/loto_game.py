@@ -69,7 +69,7 @@ while True:
             if key not in losers:
                 if isinstance(players[key], Human_Player):
                     question = input(f'Ход игрока {players[key].get_basic_name()}. Продолжить или зачеркнуть? п/з - ')
-                    if players[key].select_cask(bag[i], question):
+                    if players[key].human_select_cask(bag[i], question):
                         print(f'Проиграл игрок {players[key].get_basic_name()}')
                         losers.append(key)
                     elif players[key].win():

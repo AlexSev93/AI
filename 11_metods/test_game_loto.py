@@ -1,5 +1,4 @@
-from players_class import PC_Player, Human_Player
-from fc_for_game import select_game_mode, show_menu
+from players_class import PC_Player, Human_Player, Interface
 
 
 class Test_PC_Player:
@@ -56,7 +55,6 @@ class Test_PC_Player:
 class Test_Human_Player:
     def test_true_answer(self):
         human_player = Human_Player()
-        n = [i for i in range(1, 91)]
         test_card = human_player.get_card()
         num = []
         for i in test_card:
@@ -70,15 +68,16 @@ class Test_Human_Player:
         assert human_player.human_select_cask(num[0], '') == True
 
 
-def test_select_game_mode():
-    assert select_game_mode(5) == 'Exit'
-    a, b, c = select_game_mode(3)
-    assert type(a) == dict
-    assert type(b) == list and len(b) == 2
-    assert c == []
-    assert type(a['Компьютер_1']) == PC_Player and type(a['Компьютер_2']) == PC_Player
+class Test_Interface:
+    def test_select_game_mode(self):
+        test_interface = Interface()
+        assert test_interface.select_game_mode(5) == 'Exit'
+        a, b, c = test_interface.select_game_mode(3)
+        assert type(a) == dict
+        assert type(b) == list and len(b) == 2
+        assert c == []
+        assert type(a['Компьютер_1']) == PC_Player and type(a['Компьютер_2']) == PC_Player
 
-
-
-def test_show_menu():
-    assert type(show_menu()) == str
+    def test_show_menu(self):
+        test_interface = Interface()
+        assert type(test_interface.show_menu()) == str

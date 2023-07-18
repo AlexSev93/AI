@@ -1,16 +1,16 @@
-import fc_for_game as fc
 import random
-from players_class import Human_Player
+from players_class import Human_Player, Interface
 
-print(fc.show_menu())
+interface = Interface()
+print(interface.show_menu())
 
 while True:
     game_mode = int(input('Выбрать режим игры - '))
 
-    if fc.select_game_mode(game_mode) == 'Exit':
+    if interface.select_game_mode(game_mode) == 'Exit':
         break
     else:
-        players, winner, losers = fc.select_game_mode(game_mode)
+        players, winner, losers = interface.select_game_mode(game_mode)
         break
 
 if 0 < game_mode < 4:

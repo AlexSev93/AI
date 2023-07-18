@@ -30,6 +30,22 @@ class PC_Player:
     def __contains__(self, item):
         return item in self._card
 
+    # >
+    def __gt__(self, other):
+        return self._sum_cask > other._sum_cask
+
+    # >=
+    def __ge__(self, other):
+        return self._sum_cask >= other._sum_cask
+
+    # <
+    def __lt__(self, other):
+        return self._sum_cask < other._sum_cask
+
+    # <=
+    def __le__(self, other):
+        return self._sum_cask <= other._sum_cask
+
     def select_cask(self, num_cask):
         for j in self._card:
             if num_cask in j:
@@ -101,7 +117,7 @@ class Human_Player(PC_Player):
 
 
 class Interface:
-    @staticmethod
+    @staticmethod # это надо бы в __init__
     def show_menu():
         menu_list = ['1. Играть компьютер/человек', '2. Играть человек/человек ',
                      '3. Играть компьютер/компьютер', '4. Играть n человек',

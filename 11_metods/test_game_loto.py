@@ -44,13 +44,6 @@ class Test_PC_Player:
         pc_player.set_basic_name('TEST')
         assert pc_player.get_basic_name() == 'TEST'
 
-    def test_eq(self):
-        pc_player1 = Human_Player('A')
-        pc_player1.set_sum_cask(4)
-        pc_player2 = Human_Player('B')
-        pc_player2.set_sum_cask(4)
-        assert pc_player1 == pc_player2
-
 
 class Test_Human_Player:
     def test_true_answer(self):
@@ -66,6 +59,18 @@ class Test_Human_Player:
         assert human_player.human_select_cask(0, 'п') == False
         assert human_player.human_select_cask(0, 'з') == True
         assert human_player.human_select_cask(num[0], '') == True
+
+    def test_magic_methods(self):
+        pc_player1 = Human_Player('A')
+        pc_player1.set_sum_cask(4)
+        pc_player2 = Human_Player('B')
+        pc_player2.set_sum_cask(4)
+        assert pc_player1 == pc_player2
+        assert pc_player1 >= pc_player2
+        assert pc_player1 <= pc_player2
+        pc_player2.set_sum_cask(10)
+        assert pc_player1 < pc_player2
+        assert pc_player2 > pc_player1
 
 
 class Test_Interface:

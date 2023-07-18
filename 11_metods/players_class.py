@@ -117,7 +117,7 @@ class Human_Player(PC_Player):
 
 
 class Interface:
-    @staticmethod # это надо бы в __init__
+    @staticmethod# это надо бы в __init__
     def show_menu():
         menu_list = ['1. Играть компьютер/человек', '2. Играть человек/человек ',
                      '3. Играть компьютер/компьютер', '4. Играть n человек',

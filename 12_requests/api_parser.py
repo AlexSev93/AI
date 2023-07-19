@@ -1,6 +1,7 @@
+import json
+
 import requests
 import pprint
-import webbrowser
 
 dom = 'https://api.hh.ru'
 url_vacancies = f'{dom}/vacancies'
@@ -16,14 +17,18 @@ def country_id(name_country):
 
 
 id_Belarus = country_id('Беларусь')
-params = {'text': 'Python Developer', 'area': 16}  # 'page': 1
+name_vacansy = 'Python Developer'
+params = {'text': name_vacansy, 'area': 16}
 
-# находим ид вакансий
+# определяем количество страниц вакансий
 result = requests.get(url_vacancies, params=params).json()
 pages = result['pages']
-pages = 5 if pages > 5 else pages
-vacansies_id = []
 
+# ограничение на количество вакансий а то вылезает капча
+pages = 2 if pages > 2 else pages
+
+# находим ид вакансий
+vacansies_id = []
 for page in range(pages):
     params = {'text': 'Python Developer', 'area': 16, 'page': page}
     result = requests.get(url_vacancies, params=params).json()
@@ -31,11 +36,12 @@ for page in range(pages):
     id_on_page = [int(item['id']) for item in items]
     vacansies_id.extend(id_on_page)
 
-vacancies_keywords = {}
+
 headers = {'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" ,
     'referer':'https://www.google.com/'}
 
 # находим ключевые слова
+vacancies_keywords = {}
 for i, id in enumerate(vacansies_id):
     print(f'Обрабатываем вакансию {i+1} из {len(vacansies_id)}')
     url_vacancies_id = f'{url_vacancies}/{id}'
@@ -57,7 +63,6 @@ for i, id in enumerate(vacansies_id):
         # webbrowser.get('chrome').open(err_url)
         # next = input('Продолжить')
 
-# print(vacancies_keywords)
 # обработка лишнего
 del_key = []
 for key in vacancies_keywords.keys():
@@ -66,5 +71,17 @@ for key in vacancies_keywords.keys():
 for key in del_key:
     vacancies_keywords.pop(key)
 
-pprint.pprint(vacancies_keywords)
 
+# вычисление процентов
+sum_val = sum(vacancies_keywords.values())
+for key in vacancies_keywords.keys():
+    vacancies_keywords[key] = [vacancies_keywords[key], round(vacancies_keywords[key]/sum_val*100, 2)]
+
+
+# подготовка к записи в json
+to_json = [{'name_vacansy': name_vacansy, 'count_vacansy': len(vacansies_id),
+            'key_words': [{'name': key, 'count': vacancies_keywords[key][0], 'persent': vacancies_keywords[key][1]}
+                          for key in vacancies_keywords.keys()]}]
+
+with open('data.json', 'w') as file:
+    json.dump(to_json, file)

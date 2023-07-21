@@ -17,7 +17,7 @@ for url_tem in list_url_tem[:1]:
     result = requests.get(url_tem)
     soup = BeautifulSoup(result.text, 'html.parser')
     news_a = soup.find_all('a', class_='news-tiles__stub')
-    for num_news, one_news in enumerate(news_a):
+    for num_news, one_news in enumerate(news_a[3:4]):
         if one_news.get('href')[0] == 'h':
             print(one_news)
             href = one_news.get('href')
@@ -31,6 +31,7 @@ for url_tem in list_url_tem[:1]:
             start_post = soup.find('div', class_='news-text')
             all_news = []
             all_p = []
+            n_li = 1
             for child in start_post.descendants:
                 # pprint.pprint(child)
                 if child.name == 'div':
@@ -51,14 +52,22 @@ for url_tem in list_url_tem[:1]:
                         all_news[len(all_news)-2].append(all_p)
                         all_p = []
 
-                elif child.name == 'p':
+                elif child.name == 'p' or child.name == 'li':
+
                     if child.text == 'Наш канал в Telegram. Присоединяйтесь!':
                         red_end_text = all_p[-1]
                         if '|' in red_end_text:
                             all_p[-1] = red_end_text[:red_end_text.index('|')]
                         all_news[len(all_news) - 1].append(all_p)
                         break
-                    all_p.append(child.get_text(separator='|', strip=True))
+                    if child.name == 'li':
+                        to_add = child.get_text(separator='|', strip=True)
+                        to_add = f'{n_li}. {to_add}'
+                        all_p.append(to_add)
+                        n_li += 1
+                    else:
+                        n_li = 1
+                        all_p.append(child.get_text(separator='|', strip=True))
 
             for_json = {'website': 'https://onliner.by/', 'section_url': url_tem, 'date_post': date_post,
                         'name_post': name_post, 'post': all_news}
@@ -66,5 +75,6 @@ for url_tem in list_url_tem[:1]:
             file_name = url_tem[8:len(url_tem)-1].replace('.', '_')
             with open(f'{file_name}_{num_news}.json', 'w') as file:
                 json.dump(for_json, file)
+            pprint.pprint(all_news)
         else:
             continue

@@ -17,7 +17,7 @@ for url_tem in list_url_tem[:1]:
     result = requests.get(url_tem)
     soup = BeautifulSoup(result.text, 'html.parser')
     news_a = soup.find_all('a', class_='news-tiles__stub')
-    for num_news, one_news in enumerate(news_a[4:5]):
+    for num_news, one_news in enumerate(news_a):
         if one_news.get('href')[0] == 'h':
             print(one_news)
             href = one_news.get('href')

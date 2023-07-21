@@ -17,7 +17,7 @@ for url_tem in list_url_tem[:1]:
     result = requests.get(url_tem)
     soup = BeautifulSoup(result.text, 'html.parser')
     news_a = soup.find_all('a', class_='news-tiles__stub')
-    for num_news, one_news in enumerate(news_a[3:4]):
+    for num_news, one_news in enumerate(news_a[4:5]):
         if one_news.get('href')[0] == 'h':
             print(one_news)
             href = one_news.get('href')
@@ -36,14 +36,17 @@ for url_tem in list_url_tem[:1]:
                 # pprint.pprint(child)
                 if child.name == 'div':
                     attr = child.attrs
-                    if 'id' in attr.keys() and (attr['id'] == 'news-text-end' or attr['id'] == 'st-1'):
+                    # print(attr)
+                    if 'id' in attr.keys() and attr['id'] in ['news-text-end', 'st-1']:
                         red_end_text = all_p[-1]
                         if '|' in red_end_text:
                             all_p[-1] = red_end_text[:red_end_text.index('|')]
                         all_news[len(all_news) - 1].append(all_p)
                         break
+                    # if 'class' in attr.keys() and (attr['class'] == ['news-promo'] or attr['class'] == ['news-promo__title']):
+                    #     continue
 
-                elif (child.name == 'h2' or child.name == 'h1') and child.text != '':
+                elif child.name in ['h2', 'h1'] and child.text != '':
                     all_news.append([child.text])
                     if all_p:
                         for i in range(len(all_p)):
@@ -52,7 +55,7 @@ for url_tem in list_url_tem[:1]:
                         all_news[len(all_news)-2].append(all_p)
                         all_p = []
 
-                elif child.name == 'p' or child.name == 'li':
+                elif child.name in ['li', 'p']:
 
                     if child.text == 'Наш канал в Telegram. Присоединяйтесь!':
                         red_end_text = all_p[-1]

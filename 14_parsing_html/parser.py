@@ -1,61 +1,70 @@
+import json
+
 import requests
 from bs4 import BeautifulSoup
 import pprint
 
 dom = 'https://onliner.by/'
-list_tem = ['money', 'auto', 'realt', 'tech']
+list_tem = ['money', 'realt', 'tech']
 list_url_tem = [f'https://{part}.onliner.by/' for part in list_tem]
+
+
+def remove_left_right_space(name_str):
+    return ' '.join(name_str.split())
+
 
 for url_tem in list_url_tem[:1]:
     result = requests.get(url_tem)
     soup = BeautifulSoup(result.text, 'html.parser')
-
     news_a = soup.find_all('a', class_='news-tiles__stub')
-    for one_news in news_a:
+    for num_news, one_news in enumerate(news_a):
         if one_news.get('href')[0] == 'h':
+            print(one_news)
             href = one_news.get('href')
             result = requests.get(href)
             soup = BeautifulSoup(result.text, 'html.parser')
 
-            date_post = soup.find('div', class_='news-header__time').text
-            name_post = soup.find('div', class_='news-header__title').text
-            print(date_post, name_post)
+            date_post = soup.find('div', class_='news-header__time').text.replace('\n', '')
+            date_post = remove_left_right_space(date_post)
+            name_post = soup.find('div', class_='news-header__title').text.replace('\n', '')
+            print(name_post)
             start_post = soup.find('div', class_='news-text')
-            end_post = soup.find('div', class_='news-text-end')
-            # print(start_post, end_post)
-            all_h2 = []
-            for parent in start_post.children:
-                if parent.name == 'h2' and parent.text != '':
-                    all_h2.append(parent.text)
+            all_news = []
+            all_p = []
+            for child in start_post.descendants:
+                # pprint.pprint(child)
+                if child.name == 'div':
+                    attr = child.attrs
+                    if 'id' in attr.keys() and (attr['id'] == 'news-text-end' or attr['id'] == 'st-1'):
+                        red_end_text = all_p[-1]
+                        if '|' in red_end_text:
+                            all_p[-1] = red_end_text[:red_end_text.index('|')]
+                        all_news[len(all_news) - 1].append(all_p)
+                        break
 
-                if parent.name == 'p':
-                    print(parent.text)
-                    print(type(parent.text))
-                    print('*' * 50)
-                # if parent.name == 'p':
-                # print(parent)
-                # print(type(parent))
-                # print('*' * 50)
-            print(all_h2)
-            # for i in all_p:
-            #     end_post = soup.find('div', class_='news-text-end')
-            #     print(end_post)
-            #     break
-                # if i == soup.find('div', class_='news-text-end'):
-                #     break
-                # if i.string != None:
-                    # if 'Конец статьи для измерения глубины прочтения' in i.string:
-                    #     break
-                # print(i)
-                # print('*'*50)
-            # for i in start:
-            #     if '<h2>' in i or '<p>' in i:
-            #         if i == '<p><!--Конец статьи для измерения глубины прочтения--></p>':
-            #             break
-            #         test.append(i)
-            # print(test)
-            # all_p = [p.text for p in soup.find_all('p')]
-            # pprint.pprint(all_p)
-            break
+                elif (child.name == 'h2' or child.name == 'h1') and child.text != '':
+                    all_news.append([child.text])
+                    if all_p:
+                        for i in range(len(all_p)):
+                            if '|' in all_p[i]:
+                                all_p[i] = all_p[i].replace('|', '')
+                        all_news[len(all_news)-2].append(all_p)
+                        all_p = []
 
+                elif child.name == 'p':
+                    if child.text == 'Наш канал в Telegram. Присоединяйтесь!':
+                        red_end_text = all_p[-1]
+                        if '|' in red_end_text:
+                            all_p[-1] = red_end_text[:red_end_text.index('|')]
+                        all_news[len(all_news) - 1].append(all_p)
+                        break
+                    all_p.append(child.get_text(separator='|', strip=True))
 
+            for_json = {'website': 'https://onliner.by/', 'section_url': url_tem, 'date_post': date_post,
+                        'name_post': name_post, 'post': all_news}
+
+            file_name = url_tem[8:len(url_tem)-1].replace('.', '_')
+            with open(f'{file_name}_{num_news}.json', 'w') as file:
+                json.dump(for_json, file)
+        else:
+            continue

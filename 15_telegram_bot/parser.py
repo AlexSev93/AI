@@ -37,33 +37,24 @@ def selec_menu():
                     return url_tem
 
 
-while True:
-    url_tem = selec_menu()
-    if not url_tem:
-        break
+def get_link_news(url_tem):
     result = requests.get(url_tem)
     soup = BeautifulSoup(result.text, 'html.parser')
     news_a = soup.find_all('a', class_='news-tiles__stub')
     news_div = soup.find_all('div', class_='news-tiles__subtitle max-lines-3')
-    for i, one_news in enumerate(news_div):
-        one_news = remove_left_right_space(one_news.text.replace('\n', ''))
-        print(f'{i + 1}. {one_news}')
-    while True:
-        try:
-            num_tem = int(input('Выбрать номер новости - '))
-            if 0 < num_tem < len(news_div) + 1:
-                break
-        except ValueError:
-            print(' Вводим только числа')
+    for i in range(len(news_div)):
+        news_div[i] = remove_left_right_space(news_div[i].text.replace('\n', ''))
+        print(f'{i + 1}. {news_div[i]}')
+    return news_a, news_div
 
-    href = news_a[num_tem-1].get('href')
-    result = requests.get(href)
+
+def get_one_new(link_one_news):
+    result = requests.get(link_one_news)
     soup = BeautifulSoup(result.text, 'html.parser')
-
     date_post = soup.find('div', class_='news-header__time').text.replace('\n', '')
     date_post = remove_left_right_space(date_post)
     name_post = soup.find('div', class_='news-header__title').text.replace('\n', '')
-    # print(name_post)
+    info = [date_post, name_post]
     start_post = soup.find('div', class_='news-text')
     all_news = []
     all_p = []
@@ -108,13 +99,43 @@ while True:
                 n_li = 1
                 all_p.append(child.get_text(separator='|', strip=True))
 
-    for_json = {'website': 'https://onliner.by/', 'section_url': url_tem, 'date_post': date_post,
-                'name_post': name_post, 'post': all_news}
+    with open('test.json', 'w') as file:
+        json.dump(all_news, file)
 
+    return all_news, info
+
+
+def save_to_json(for_json):
     file_name = url_tem[8:len(url_tem) - 1].replace('.', '_')
     with open(f'{file_name}_{num_tem}.json', 'w') as file:
         json.dump(for_json, file)
-    pprint.pprint(all_news)
-    print('*'*50)
-    print('Конец парсинга')
-    print('*' * 50)
+
+
+if __name__ == '__main__':
+    while True:
+        url_tem = selec_menu()
+        if not url_tem:
+            break
+
+        news_a, news_div = get_link_news(url_tem)
+
+        while True:
+            try:
+                num_tem = int(input('Выбрать номер новости - '))
+                if 0 < num_tem < len(news_div) + 1:
+                    break
+            except ValueError:
+                print(' Вводим только числа')
+
+        href = news_a[num_tem-1].get('href')
+        all_news, info = get_one_new(href)
+
+        for_json = {'website': 'https://onliner.by/', 'section_url': url_tem, 'date_post': info[1],
+                    'name_post': info[0], 'post': all_news}
+
+        save_to_json(for_json)
+
+        pprint.pprint(all_news)
+        print('*'*50)
+        print('Конец парсинга')
+        print('*' * 50)

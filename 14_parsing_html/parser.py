@@ -63,7 +63,7 @@ while True:
     date_post = soup.find('div', class_='news-header__time').text.replace('\n', '')
     date_post = remove_left_right_space(date_post)
     name_post = soup.find('div', class_='news-header__title').text.replace('\n', '')
-    print(name_post)
+    # print(name_post)
     start_post = soup.find('div', class_='news-text')
     all_news = []
     all_p = []

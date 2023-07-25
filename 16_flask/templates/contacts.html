@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="container-fluid">
-                    <p>По вакансии name_vacansy в регионе country найдено N вакансий</p>
+                    <p>По вакансии {{name_request}} в регионе {{name_country}} найдено {{count_vacansies}} вакансий</p>
                 </div>
                 <div class="container-fluid">
                     <script src="https://bootstraptema.ru/plugins/jquery/jquery-1.11.3.min.js"></script>
@@ -44,42 +44,40 @@
                     <div id="chart"></div>
                     <script>
                      $(function () {
-                     $("#chart").shieldChart({
-                     theme: "light",
-                     seriesSettings: {
-                     line: {
-                     dataPointText: {
-                     enabled: true
-                     }
-                     }
-                     },
-                     chartLegend: {
-                     align: 'center',
-                     borderRadius: 1,
-                     borderWidth: 1,
-                     verticalAlign: 'top'
-                     },
-                     exportOptions: {
-                     image: true,
-                     print: true
-                     },
-                     axisX: {
-                     categoricalValues: ['Python', 'Flask', 'SQL']
-                     },
-                     axisY: {
-                     title: {
-                     text: "Проценты"
-                     }
-                     },
-                     primaryHeader: {
-                     text: ""
-                     },
-                     dataSeries: [{
-                     seriesType: 'line',
-                     collectionAlias: 'Ключевые навыки',
-                     data: [50, 25, 25]
-                     }]
-                     });
+                         $("#chart").shieldChart({
+                         theme: "light",
+                         seriesSettings: {
+                                             line: {
+                                                     dataPointText: {
+                                                                     enabled: true
+                                                     }
+                                                    }
+                                        },
+                         chartLegend: {
+                                         align: 'center',
+                                         borderRadius: 1,
+                                         borderWidth: 1,
+                                         verticalAlign: 'top'
+                                        },
+                         exportOptions: {
+                                         image: true,
+                                         print: true
+                                        },
+                         axisX: {
+                                    [список, слов]
+                                 },
+                         axisY: {
+                                 title: {
+                                            text: "%"
+                                        }
+                                },
+                         primaryHeader: {
+                                            text: ""
+                                          },
+                         dataSeries: [{
+                                         [10, 20]
+                                     }]
+                         });
                      });
                      </script>
                 </div>
@@ -87,48 +85,25 @@
                     <h3 class="mt-4" align="center">Самое большое совпадение ключевых требований</h3>
                 </div>
                  <div class="container-fluid">
+                     {% if better_vacanci %}
                      <table class="table">
                       <tbody>
                         <tr>
+                            {% for vac in better_vacanci %}
                           <td>
                             <div class="card" style="width: 18rem;">
                                 <div class="card-body">
-                                    <h5 class="card-title">Вставить название вакансии</h5>
-                                    <p class="card-text">Вставить краткое описание вакансии</p>
-                                    <a href="#" class="btn btn-primary">ссылка на вакансию на hh</a>
+                                    <h5 class="card-title">{{vac[1]}}</h5>
+                                    <p class="card-text">{{vac[2]}}</p>
+                                    <a href="{{vac[0]}}" class="btn btn-primary">Перейти на вакансию</a>
                                 </div>
                             </div>
                           </td>
-                          <td>
-                            <div class="card" style="width: 18rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title">Вставить название вакансии</h5>
-                                    <p class="card-text">Вставить краткое описание вакансии</p>
-                                    <a href="#" class="btn btn-primary">ссылка на вакансию на hh</a>
-                                </div>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="card" style="width: 18rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title">Вставить название вакансии</h5>
-                                    <p class="card-text">Вставить краткое описание вакансии</p>
-                                    <a href="#" class="btn btn-primary">ссылка на вакансию на hh</a>
-                                </div>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="card" style="width: 18rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title">Вставить название вакансии</h5>
-                                    <p class="card-text">Вставить краткое описание вакансии</p>
-                                    <a href="#" class="btn btn-primary">ссылка на вакансию на hh</a>
-                                </div>
-                            </div>
-                          </td>
+                            {% endfor %}
                         </tr>
                       </tbody>
                     </table>
+                     {% endif %}
                  </div>
             </div>
         </div>

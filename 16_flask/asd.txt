@@ -1,0 +1,168 @@
+                     <table class="table">
+                         {% if {better_vacanci} %}
+                         {% endif %}
+                      <tbody>
+                        <tr>
+
+                          <td>
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Вставить название вакансии</h5>
+                                    <p class="card-text">Вставить краткое описание вакансии</p>
+                                    <a href="#" class="btn btn-primary">ссылка на вакансию на hh</a>
+                                </div>
+                            </div>
+                          </td>
+
+                            <td>
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Вставить название вакансии</h5>
+                                    <p class="card-text">Вставить краткое описание вакансии</p>
+                                    <a href="#" class="btn btn-primary">ссылка на вакансию на hh</a>
+                                </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Вставить название вакансии</h5>
+                                    <p class="card-text">Вставить краткое описание вакансии</p>
+                                    <a href="#" class="btn btn-primary">ссылка на вакансию на hh</a>
+                                </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Вставить название вакансии</h5>
+                                    <p class="card-text">Вставить краткое описание вакансии</p>
+                                    <a href="#" class="btn btn-primary">ссылка на вакансию на hh</a>
+                                </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+
+
+
+
+
+
+
+
+                    {'accept_handicapped': False,
+ 'accept_incomplete_resumes': False,
+ 'accept_kids': False,
+ 'accept_temporary': False,
+ 'address': {'building': '15/2',
+             'city': 'Минск',
+             'description': None,
+             'lat': 53.914383,
+             'lng': 27.566529,
+             'metro': {'lat': 53.905615,
+                       'line_id': '63',
+                       'line_name': 'Автозаводская',
+                       'lng': 27.55415,
+                       'station_id': '63.422',
+                       'station_name': 'Немига'},
+             'metro_stations': [{'lat': 53.905615,
+                                 'line_id': '63',
+                                 'line_name': 'Автозаводская',
+                                 'lng': 27.55415,
+                                 'station_id': '63.422',
+                                 'station_name': 'Немига'},
+                                {'lat': 53.915369,
+                                 'line_id': '62',
+                                 'line_name': 'Московская',
+                                 'lng': 27.583265,
+                                 'station_id': '62.408',
+                                 'station_name': 'Площадь Якуба Коласа'}],
+             'raw': 'Минск, проспект Машерова, 15/2',
+             'street': 'проспект Машерова'},
+ 'allow_messages': True,
+ 'alternate_url': 'https://hh.ru/vacancy/83952968',
+ 'apply_alternate_url': 'https://hh.ru/applicant/vacancy_response?vacancyId=83952968',
+ 'archived': False,
+ 'area': {'id': '1002', 'name': 'Минск', 'url': 'https://api.hh.ru/areas/1002'},
+ 'billing_type': {'id': 'standard', 'name': 'Стандарт'},
+ 'branded_description': None,
+ 'code': None,
+ 'contacts': None,
+ 'created_at': '2023-07-24T15:13:30+0300',
+ 'department': None,
+ 'description': '<p><strong>Rocketdata.io</strong> – белорусская инновационная '
+                'компания, резидент Парка Высоких Технологий Республики '
+                'Беларусь, разрабатывающая платформу для управления '
+                'информацией о бизнесе и работе с отзывами в популярных онлайн '
+                'источниках.</p> <p>Мы ищем <strong>начинающего python '
+                'разработчика</strong> для <em>сбора и анализа данных</em> для '
+                'внутренних пользователей (сотрудники компании).</p> '
+                '<p><strong>Основной вашей задачей</strong> будет являться '
+                '<em>автоматизация процесса сбора информации с различных '
+                'ресурсов на языке python с использованием языков запросов '
+                'xpath и jq, работа с регулярными выражениями, с открытым '
+                'форматами передачи данных таких как json, xml.</em></p> <p>Мы '
+                'готовы рассмотреть кандидатов без опыта, но с завершёнными '
+                'курсами python разработки.</p> <p><strong>Необходимые знания '
+                'для нашего будущего коллеги:</strong></p> <ul> <li> <p>Python '
+                '(минимально - пройденные курсы)</p> </li> <li> <p>Понимание '
+                'работы протоколов передачи данных</p> </li> <li> <p>Уверенные '
+                'знания HTML</p> </li> <li> <p>Базовые знания JS</p> </li> '
+                '</ul> <p><strong>Люди в RocketData - наше главное '
+                'сокровище</strong>. Мы ценим каждого, кто стал частью нашей '
+                'команды, и следим за его комфортом:</p> - на время ИС '
+                'преимущественно работа в офисе, после - гибрид;<br />- '
+                'возможность к подключению ДМС и системе Allsports;<br />- '
+                'технику выдаем, если есть такая необходимость;<br />- мы все '
+                'на &quot;ты&quot; и никакого дресс-кода;<br />- прекрасных, '
+                'открытых, профессиональных коллег в отделе и в компании в '
+                'целом;<br />- жизнь вне работы есть у каждого - мы частенько '
+                'собираемся после работы в офисе поиграть в настолки, в '
+                'Kinnect, Fifa, а также ходим на квизы, в пабы и просто '
+                'живем)<br />В генетическом коде RocketData записано, что '
+                'каждый сотрудник компании каким-то естественным образом '
+                'становится частью новой большой &quot;семьи&quot;. И это '
+                'круто, потому что работа - это место, где мы проводим 9 часов '
+                'своей жизни каждый день. А такая &quot;семейная&quot; '
+                'атмосфера делает нашу жизнь ещё чуточку счастливее.',
+ 'driver_license_types': [],
+ 'employer': {'accredited_it_employer': False,
+              'alternate_url': 'https://hh.ru/employer/3591220',
+              'id': '3591220',
+              'logo_urls': {'90': 'https://hhcdn.ru/employer-logo/5562592.png',
+                            'original': 'https://hhcdn.ru/employer-logo-original/985443.png'},
+              'name': 'RocketData',
+              'trusted': True,
+              'url': 'https://api.hh.ru/employers/3591220',
+              'vacancies_url': 'https://api.hh.ru/vacancies?employer_id=3591220'},
+ 'employment': {'id': 'full', 'name': 'Полная занятость'},
+ 'experience': {'id': 'noExperience', 'name': 'Нет опыта'},
+ 'has_test': False,
+ 'hidden': False,
+ 'id': '83952968',
+ 'initial_created_at': '2023-07-24T15:13:30+0300',
+ 'insider_interview': None,
+ 'key_skills': [],
+ 'languages': [],
+ 'name': 'Python (Junior) разработчик',
+ 'negotiations_url': None,
+ 'premium': False,
+ 'professional_roles': [{'id': '96', 'name': 'Программист, разработчик'}],
+ 'published_at': '2023-07-24T15:13:30+0300',
+ 'quick_responses_allowed': False,
+ 'relations': [],
+ 'response_letter_required': False,
+ 'response_url': None,
+ 'salary': None,
+ 'schedule': {'id': 'fullDay', 'name': 'Полный день'},
+ 'specializations': [],
+ 'suitable_resumes_url': None,
+ 'test': None,
+ 'type': {'id': 'open', 'name': 'Открытая'},
+ 'vacancy_constructor_template': None,
+ 'working_days': [],
+ 'working_time_intervals': [],
+ 'working_time_modes': []}

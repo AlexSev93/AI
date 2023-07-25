@@ -17,17 +17,16 @@ def get_country_id(name_country):
 
 
 # находим ид вакансий
-def get_vacansies_id(country_id, name_vacansy):
-    params = {'text': name_vacansy, 'area': country_id}
-    result = requests.get(url_vacancies, params=params).json()
-    pages = result['pages']
+def get_vacansies_id(country_id, name_vacansy, pages):
+    # params = {'text': name_vacansy, 'area': country_id}
+    # result = requests.get(url_vacancies, params=params).json()
 
+    # pages = result['pages']
     # ограничение на количество вакансий а то вылезает капча
-    pages = 2 if pages > 2 else pages
-
+    # pages = 2 if pages > 2 else pages
     vacansies_id = []
     for page in range(pages):
-        params = {'text': 'Python Developer', 'area': 16, 'page': page}
+        params = {'text': name_vacansy, 'area': country_id, 'page': page}
         result = requests.get(url_vacancies, params=params).json()
         items = result['items']
         id_on_page = [int(item['id']) for item in items]
@@ -46,7 +45,8 @@ def get_keywords(vacansies_id):
     one_vacancy_info = []
     vacancies_keywords = {}
     for i, id in enumerate(vacansies_id):
-        print(f'Обрабатываем вакансию {i + 1} из {len(vacansies_id)}')
+        status = f'Обрабатываем вакансию {i + 1} из {len(vacansies_id)}'
+        print(status)
         url_vacancies_id = f'{url_vacancies}/{id}'
         result = requests.get(url_vacancies_id, headers=headers).json()
         # pprint.pprint(result)
@@ -79,12 +79,6 @@ def get_keywords(vacansies_id):
         except KeyError:
             # TODO: что-то делать с капчей
             continue
-            # webbrowser.register('chrome', None,
-            #                     webbrowser.BackgroundBrowser(
-            #                         "C://Program Files (x86)//Google//Chrome//Application//chrome.exe"))
-            # err_url = result['errors'][0]['captcha_url']
-            # webbrowser.get('chrome').open(err_url)
-            # next = input('Продолжить')
         one_vacancy_info.append(list_skill)
         vacancies_info[id] = one_vacancy_info
         one_vacancy_info = []
@@ -123,33 +117,42 @@ def write_to_json(name_vacansy, vacansies_id, vacancies_keywords):
 
 
 def get_better_vacanci(sorted_vacancies_keywords, vacancies_info):
-    if len(sorted_vacancies_keywords) >= 3:
-        often_keywords = []
-        for i, key in enumerate(sorted_vacancies_keywords.keys()):
-            if i == 4:
-                break
-            else:
-                often_keywords.append(key)
 
-    true_vacanci = []
-    for vac_id in vacancies_info.keys():
-        keywords_in_vacanci = vacancies_info[vac_id][-1]
+    keywords = [key for key in sorted_vacancies_keywords.keys()]
+    # if len(sorted_vacancies_keywords) >= 3:
+    #     often_keywords = []
+    #     for i, key in enumerate(sorted_vacancies_keywords.keys()):
+    #         if i == 4:
+    #             break
+    #         else:
+    #             often_keywords.append(key)
+
+    count_coincidences = []
+    better_vacanci = []
+    for vac in vacancies_info.keys():
+        keywords_in_vacanci = vacancies_info[vac][-1]
         cheak = 0
-        for often in often_keywords:
+        for often in keywords:
             if often in keywords_in_vacanci:
                 cheak += 1
 
-        if cheak == 3:
-            true_vacanci.append(vacancies_info[vac_id])
+        if len(better_vacanci) == 5:
+            min_coincidences = min(count_coincidences)
+            remove_index = count_coincidences.index(min_coincidences)
+            count_coincidences.pop(remove_index)
+            better_vacanci.pop(remove_index)
 
-    return true_vacanci
+        count_coincidences.append(cheak)
+        better_vacanci.append(vacancies_info[vac])
+
+    return better_vacanci
 
 
 if __name__ == '__main__':
     country_id = get_country_id('Беларусь')
     name_vacansy = 'Python Developer'
-
-    vacansies_id = get_vacansies_id(country_id, name_vacansy)
+    pages = 4
+    vacansies_id = get_vacansies_id(country_id, name_vacansy, pages)
 
     vacancies_keywords = get_keywords(vacansies_id)
 

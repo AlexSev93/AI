@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
@@ -38,49 +39,46 @@
                 <div class="container-fluid">
                     <p>По вакансии {{name_request}} в регионе {{name_country}} найдено {{count_vacansies}} вакансий</p>
                 </div>
-                <div class="container-fluid">
-                    <script src="https://bootstraptema.ru/plugins/jquery/jquery-1.11.3.min.js"></script>
-                    <script src="https://bootstraptema.ru/plugins/2016/shieldui/script.js"></script>
-                    <div id="chart"></div>
-                    <script>
-                     $(function () {
-                         $("#chart").shieldChart({
-                         theme: "light",
-                         seriesSettings: {
-                                             line: {
-                                                     dataPointText: {
-                                                                     enabled: true
-                                                     }
-                                                    }
-                                        },
-                         chartLegend: {
-                                         align: 'center',
-                                         borderRadius: 1,
-                                         borderWidth: 1,
-                                         verticalAlign: 'top'
-                                        },
-                         exportOptions: {
-                                         image: true,
-                                         print: true
-                                        },
-                         axisX: {
-                                    [список, слов]
-                                 },
-                         axisY: {
-                                 title: {
-                                            text: "%"
-                                        }
-                                },
-                         primaryHeader: {
-                                            text: ""
-                                          },
-                         dataSeries: [{
-                                         [10, 20]
-                                     }]
-                         });
-                     });
-                     </script>
-                </div>
+
+
+        <br><br><br>
+
+        <div class="container-fluid">
+
+        <canvas id="myChart"></canvas>
+        <script>
+            const keywords = {{ keywords | tojson}};
+            const value = {
+            labels: keywords,
+            datasets: [{
+                label: 'Частота ключевых слов',
+                backgroundColor: 'rgb(13,110,253)',
+                borderColor: 'rgb(13,110,253)',
+                data: {{ value | tojson}},
+                        }]
+            };
+
+            const config = {
+            type: 'line',
+            data: value,
+            options: { maintainAspectRatio: false }
+            };
+
+            const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+            );
+
+        </script>
+
+
+        </div><!-- /.col-md-8 col-md-offset-2 -->
+
+
+
+
+
+
                 <div class="container-fluid">
                     <h3 class="mt-4" align="center">Самое большое совпадение ключевых требований</h3>
                 </div>

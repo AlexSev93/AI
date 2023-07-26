@@ -1,6 +1,4 @@
 import json
-import pprint
-
 import requests
 
 dom = 'https://api.hh.ru'
@@ -105,12 +103,9 @@ def get_keywords(vacansies_id):
     return sorted_vacancies_keywords, vacancies_info
 
 
-def write_to_json(name_vacansy, vacansies_id, vacancies_keywords):
-    # подготовка к записи в json
-    to_json = [{'name_vacansy': name_vacansy, 'count_vacansy': len(vacansies_id),
-                'key_words': [
-                    {'name': key, 'count': vacancies_keywords[key][0], 'persent': vacancies_keywords[key][1]}
-                    for key in vacancies_keywords.keys()]}]
+def write_to_json(name_vacansy, vacansies_id, country, vacancies_keywords):
+    to_json = [{'name_vacansy': name_vacansy, 'country': country, 'count_vacansy': len(vacansies_id),
+                'key_words': [{'name': key, 'count': vacancies_keywords[key]} for key in vacancies_keywords.keys()]}]
 
     with open('data.json', 'w') as file:
         json.dump(to_json, file)
@@ -119,14 +114,6 @@ def write_to_json(name_vacansy, vacansies_id, vacancies_keywords):
 def get_better_vacanci(sorted_vacancies_keywords, vacancies_info):
 
     keywords = [key for key in sorted_vacancies_keywords.keys()]
-    # if len(sorted_vacancies_keywords) >= 3:
-    #     often_keywords = []
-    #     for i, key in enumerate(sorted_vacancies_keywords.keys()):
-    #         if i == 4:
-    #             break
-    #         else:
-    #             often_keywords.append(key)
-
     count_coincidences = []
     better_vacanci = []
     for vac in vacancies_info.keys():
@@ -149,6 +136,7 @@ def get_better_vacanci(sorted_vacancies_keywords, vacancies_info):
 
 
 if __name__ == '__main__':
+
     country_id = get_country_id('Беларусь')
     name_vacansy = 'Python Developer'
     pages = 4
@@ -156,4 +144,4 @@ if __name__ == '__main__':
 
     vacancies_keywords = get_keywords(vacansies_id)
 
-    write_to_json(name_vacansy, vacansies_id, vacancies_keywords)
+    write_to_json(name_vacansy, vacansies_id, 'Беларусь', vacancies_keywords)

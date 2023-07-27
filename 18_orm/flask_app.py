@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from api_parser import get_vacansies_id, get_keywords, get_country_id, get_better_vacanci
 from sql import def_for_parser_db as def_db
+from orm import orm
 
 app = Flask(__name__)
 
@@ -39,7 +40,7 @@ def form():
         value, keywords = [vacancies_keywords[key] for key in vacancies_keywords.keys()], \
                           [key for key in vacancies_keywords.keys()]
 
-        def_db.insert_request_info(name_country, name_request, vacancies_keywords)
+        orm.insert_request_info(name_country, name_request, vacancies_keywords)
 
         return render_template('contacts.html', name_request=name_request, name_country=name_country,
                                count_vacansies=len(vacansies_id), better_vacanci=better_vacanci,

@@ -1,6 +1,10 @@
 import sqlite3
 
-con = sqlite3.connect('C:/Users/Admin/PycharmProjects/AI/16_flask/sql/parser_hh.sqlite', check_same_thread=False)
+# orm
+con = sqlite3.connect('C:/Users/Admin/PycharmProjects/AI/18_orm/orm/orm.sqlite', check_same_thread=False)
+
+# sqlite
+# con = sqlite3.connect('C:/Users/Admin/PycharmProjects/AI/16_flask/sql/parser_hh.sqlite', check_same_thread=False)
 cur = con.cursor()
 
 

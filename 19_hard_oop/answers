@@ -1,0 +1,7 @@
+1.  <class '__main__.A'> <class 'type'> <class 'type'> <class 'type'>
+2.  __mro__
+3.  В нем определен хотя бы один из методов __get__, __set__, __delete__
+4.  Будет ошибка
+5.  c3
+6.  A = type('A', (list,), {})
+7.  10

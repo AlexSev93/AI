@@ -29,7 +29,7 @@ def form():
         name_request = request.form['name_vacansy']
         name_country = request.form['name_country']
 
-        pages = int(request.form['pages_radio'].replace('value_', ''))
+        pages = int(request.form['pages_radio'])
 
         country_id = get_country_id(name_request)
         vacansies_id = get_vacansies_id(country_id, name_request, pages)

@@ -16,12 +16,6 @@ def get_country_id(name_country):
 
 # находим ид вакансий
 def get_vacansies_id(country_id, name_vacansy, pages):
-    # params = {'text': name_vacansy, 'area': country_id}
-    # result = requests.get(url_vacancies, params=params).json()
-
-    # pages = result['pages']
-    # ограничение на количество вакансий а то вылезает капча
-    # pages = 2 if pages > 2 else pages
     vacansies_id = []
     for page in range(pages):
         params = {'text': name_vacansy, 'area': country_id, 'page': page}
@@ -75,7 +69,6 @@ def get_keywords(vacansies_id):
                     elif skill['name'] in vacancies_keywords:
                         vacancies_keywords[skill['name']] += 1
         except KeyError:
-            # TODO: что-то делать с капчей
             continue
         one_vacancy_info.append(list_skill)
         vacancies_info[id] = one_vacancy_info

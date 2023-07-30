@@ -4,7 +4,12 @@ import requests
 
 
 class Command(BaseCommand):
-    def handle(self, *args, **options):
+
+    def add_arguments(self, parser):
+        parser.add_argument('country', type=str)
+        parser.add_argument('name_vacancy', type=str)
+
+    def handle(self, *args, **kwargs):
         print('*' * 30)
         print('my command')
 
@@ -100,8 +105,11 @@ class Command(BaseCommand):
 
             return sorted_vacancies_keywords, vacancies_info
 
-        country = 'Беларусь'
-        name_vacancy = 'Python Developer'
+        country = kwargs['country']
+        name_vacancy = kwargs['name_vacancy'].replace('.', ' ')
+
+        print(country, name_vacancy)
+
         keywords, _ = get_keywords(get_vacancies_id(get_country_id(country), name_vacancy))
         keywords = [key for key in keywords.keys()]
 

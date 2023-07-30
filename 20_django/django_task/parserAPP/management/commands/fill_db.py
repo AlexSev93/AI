@@ -108,8 +108,6 @@ class Command(BaseCommand):
         country = kwargs['country']
         name_vacancy = kwargs['name_vacancy'].replace('.', ' ')
 
-        print(country, name_vacancy)
-
         keywords, _ = get_keywords(get_vacancies_id(get_country_id(country), name_vacancy))
         keywords = [key for key in keywords.keys()]
 

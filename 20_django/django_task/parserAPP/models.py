@@ -23,4 +23,4 @@ class Vacancies(models.Model):
     words = models.ManyToManyField(Keywords)
 
     def __str__(self):
-        return f'{self.vacancy} в {self.regions}: {self.words.all()}'
+        return f'{self.vacancy} в {self.regions}: {self.words}'

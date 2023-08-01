@@ -4,10 +4,10 @@ import requests
 
 
 class Command(BaseCommand):
-
-    def add_arguments(self, parser):
-        parser.add_argument('country', type=str)
-        parser.add_argument('name_vacancy', type=str)
+    def __init__(self, country, vacancy, pages):
+        self.country = country
+        self.vacancy = vacancy
+        self.pages = pages
 
     def handle(self, *args, **kwargs):
         print('*' * 30)
@@ -42,18 +42,16 @@ class Command(BaseCommand):
                 'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36",
                 'referer': 'https://www.google.com/'}
 
-            vacancies_info = {}
-            one_vacancy_info = []
+            vacancies_info = []
+            one_vacancy_info = {}
             vacancies_keywords = {}
             for i, id in enumerate(vacancies_id):
                 status = f'Обрабатываем вакансию {i + 1} из {len(vacancies_id)}'
                 print(status)
                 url_vacancies_id = f'{url_vacancies}/{id}'
                 result = requests.get(url_vacancies_id, headers=headers).json()
-                # pprint.pprint(result)
-                # break
-                one_vacancy_info.append(result['alternate_url'])
-                one_vacancy_info.append(result['name'])
+                one_vacancy_info['url'] = str(result['alternate_url'])
+                one_vacancy_info['vacancy'] = result['name']
                 if str(result['salary']) == 'None':
                     salary = 'Не указана'
                 elif result['salary']['from'] and str(result['salary']['to']) == 'None':
@@ -68,7 +66,8 @@ class Command(BaseCommand):
                               'Опыт: ' + result['experience']['name'] + '. ' + \
                               'Должность: ' + result['professional_roles'][0]['name'] + '. ' + \
                               'Зарплата: ' + salary + '. '
-                one_vacancy_info.append(description)
+                one_vacancy_info['description'] = description
+
                 list_skill = []
                 try:
                     for skill in result['key_skills']:
@@ -80,9 +79,10 @@ class Command(BaseCommand):
                                 vacancies_keywords[skill['name']] += 1
                 except KeyError:
                     continue
-                one_vacancy_info.append(list_skill)
-                vacancies_info[id] = one_vacancy_info
-                one_vacancy_info = []
+                one_vacancy_info['skills'] = list_skill
+                one_vacancy_info['id'] = id
+                vacancies_info.append(one_vacancy_info)
+                one_vacancy_info = {}
 
             # обработка лишнего
             del_key = []
@@ -105,38 +105,50 @@ class Command(BaseCommand):
 
             return sorted_vacancies_keywords, vacancies_info
 
-        country = kwargs['country']
-        name_vacancy = kwargs['name_vacancy'].replace('.', ' ')
-
-        keywords, _ = get_keywords(get_vacancies_id(get_country_id(country), name_vacancy))
-        keywords = [key for key in keywords.keys()]
+        country = self.country
+        name_vacancy = self.vacancy
+        pages = self.pages
 
         regions_db = Regions.objects.all()
         regions_db = [str(region) for region in regions_db]
-        if country not in regions_db:
+        if country in regions_db:
+            vacancies_db = Vacancies.objects.filter(regions_id=Regions.objects.get(region=country).id)
+            vacancies_db = [str(vacancy.vacancy) for vacancy in vacancies_db]
+            if name_vacancy.lower() not in vacancies_db:
+                # TODO: сделать функцию
+                keywords_dist, info = get_keywords(get_vacancies_id(get_country_id(country), name_vacancy, pages))
+                keywords_id = []
+                for word in keywords_dist.keys():
+                    Keywords.objects.create(word=word, count=keywords_dist[word])
+                    keywords_id.append(Keywords.objects.latest('id'))
+
+                region_id = Regions.objects.get(region=country).id
+
+                new_vacancy = Vacancies.objects.create(vacancy=name_vacancy, regions=Regions.objects.get(id=region_id))
+                # добавляем ключевые слова по id которые уже были записаны в базу и относяться к этой записи
+                for word_id in keywords_id:
+                    new_vacancy.words.add(word_id)
+            else:
+                print('Такая вакансия уже есть')
+
+        else:
             Regions.objects.create(region=country)
+            # TODO: сделать функцию
+            keywords_dist, info = get_keywords(get_vacancies_id(get_country_id(country), name_vacancy, pages))
+            keywords_id = []
+            for word in keywords_dist.keys():
+                Keywords.objects.create(word=word, count=keywords_dist[word])
+                keywords_id.append(Keywords.objects.latest('id'))
 
-        keywords_db = Keywords.objects.all()
-        keywords_db = [str(word) for word in keywords_db]
-        keywords_id = []
-        for word in keywords:
-            if word not in keywords_db:
-                Keywords.objects.create(word=word)
-                keywords_id.append(Keywords.objects.get(word=word).id)
-
-        region_id = Regions.objects.get(region=country).id
-
-        # находим id слов из базы которые есть в запросе
-        # keywords_id = [Keywords.objects.get(word=word).id for word in keywords]
-
-        new_vacancy = Vacancies.objects.create(vacancy=name_vacancy, regions=Regions.objects.get(id=region_id))
-        # добавляем ключевые слова по id которые уже были записаны в базу и относяться к этой записи
-        for word_id in keywords_id:
-            new_vacancy.words.add(word_id)
+            region_id = Regions.objects.get(region=country).id
+            new_vacancy = Vacancies.objects.create(vacancy=name_vacancy, regions=Regions.objects.get(id=region_id))
+            for word_id in keywords_id:
+                new_vacancy.words.add(word_id)
 
         print('END')
         print('*' * 30)
 
+        return info
 # выбор всех
 # regions = Regions.objects.all()
 # print(regions)

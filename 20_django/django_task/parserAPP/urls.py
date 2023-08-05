@@ -5,7 +5,6 @@ from django.urls import path
 app_name = 'parserAPP'
 
 urlpatterns = [
-    path('results/', views.request_vacancy, name='results'),
     path('', views.VacsListView.as_view(), name='vac_list'),
     path('vacancies-detail/<int:pk>/', views.InfoDetailView.as_view(), name='vac_detail'),
     path('vacancies-create/', views.SearchCreateView.as_view(), name='vac_create'),

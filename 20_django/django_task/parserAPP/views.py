@@ -33,8 +33,7 @@ class SearchCreateView(CreateView):
     template_name = 'parserAPP/vacancies_create.html'
     success_url = reverse_lazy('parserAPP:vac_list')
 
-    def __init__(self, **kwargs):
-        super().__init__(kwargs)
+    def __init__(self):
         self.pages = None
         self.country = None
         self.name_vacancy = None

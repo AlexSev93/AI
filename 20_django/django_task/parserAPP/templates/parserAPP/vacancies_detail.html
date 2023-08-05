@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block container %}
-<h1 class="h3 mb-2 text-gray-800">Навыки для вакансии {{vacancy.vacancy}}</h1>
+<h1 class="h3 mb-2 text-gray-800">Навыки для вакансии {{object.vacancy}}</h1>
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
@@ -21,11 +21,11 @@
 
                 </thead>
                 <tbody>
-                {% for word in  keywords%}
+                {% for word in  object.words.all%}
                     <tr>
                         <td>{{word.word}}</td>
                         <td>{{word.count}}</td>
-                        <td>{{word.per}}</td>
+                        <td>{{word.percent}}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+Ключевые навыки
+{% endblock %}
+
+{% block container %}
+<div>
+    <p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Удалить</button>
+        </form>
+    </p>
+</div>
+
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Навык</th>
+                        <th>Частота встречи</th>
+                        <th>В процентах</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                {% for word in  object.words.all%}
+                    <tr>
+                        <td>{{word.word}}</td>
+                        <td>{{word.count}}</td>
+                        <td>{{word.percent}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

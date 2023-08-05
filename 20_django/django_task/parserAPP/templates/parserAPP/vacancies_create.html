@@ -18,11 +18,10 @@
             <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">Найти вакансию!</h1>
             </div>
-            <form class="user" method="post">
+            <form class="user" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{form.as_p}}
                 <button type="submit" class="btn btn-primary btn-user btn-block">Найти</button>
-
             </form>
         </div>
     </div>

@@ -98,10 +98,13 @@ class Command(BaseCommand):
             sorted_vacancies_keywords = {key: val for key, val in sorted_val}
 
             # вычисление процентов
-            # sum_val = sum(sorted_vacancies_keywords.values())
-            # for key in sorted_vacancies_keywords.keys():
-            #     sorted_vacancies_keywords[key] = [sorted_vacancies_keywords[key],
-            #                                       round(sorted_vacancies_keywords[key] / sum_val * 100)]
+            sum_val = sum(sorted_vacancies_keywords.values())
+            n = {}
+            for key in sorted_vacancies_keywords.keys():
+                n[key] = {'count': sorted_vacancies_keywords[key],
+                          'percent': round(sorted_vacancies_keywords[key] / sum_val * 100)}
+
+            sorted_vacancies_keywords = n
 
             return sorted_vacancies_keywords, vacancies_info
 
@@ -112,78 +115,37 @@ class Command(BaseCommand):
         regions_db = Regions.objects.all()
         regions_db = [str(region) for region in regions_db]
         if country in regions_db:
-            vacancies_db = Vacancies.objects.filter(regions_id=Regions.objects.get(region=country).id)
-            vacancies_db = [str(vacancy.vacancy) for vacancy in vacancies_db]
-            if name_vacancy.lower() not in vacancies_db:
-                # TODO: сделать функцию
+            vacancies_db = Vacancies.objects.filter(regions=country)
+            vac_region = [[item.vacancy, item.regions] for item in vacancies_db]
+
+            if [name_vacancy, country] not in vac_region:
                 keywords_dist, info = get_keywords(get_vacancies_id(get_country_id(country), name_vacancy, pages))
                 keywords_id = []
                 for word in keywords_dist.keys():
-                    Keywords.objects.create(word=word, count=keywords_dist[word])
+                    Keywords.objects.create(word=word, count=keywords_dist[word]['count'], percent=keywords_dist[word]['percent'])
                     keywords_id.append(Keywords.objects.latest('id'))
 
-                region_id = Regions.objects.get(region=country).id
-
-                new_vacancy = Vacancies.objects.create(vacancy=name_vacancy, regions=Regions.objects.get(id=region_id))
+                new_vacancy = Vacancies.objects.create(vacancy=name_vacancy, regions=country)
                 # добавляем ключевые слова по id которые уже были записаны в базу и относяться к этой записи
                 for word_id in keywords_id:
                     new_vacancy.words.add(word_id)
+                return info
             else:
                 print('Такая вакансия уже есть')
 
         else:
             Regions.objects.create(region=country)
-            # TODO: сделать функцию
             keywords_dist, info = get_keywords(get_vacancies_id(get_country_id(country), name_vacancy, pages))
             keywords_id = []
             for word in keywords_dist.keys():
-                Keywords.objects.create(word=word, count=keywords_dist[word])
+                Keywords.objects.create(word=word, count=keywords_dist[word]['count'], percent=keywords_dist[word]['percent'])
                 keywords_id.append(Keywords.objects.latest('id'))
 
-            region_id = Regions.objects.get(region=country).id
-            new_vacancy = Vacancies.objects.create(vacancy=name_vacancy, regions=Regions.objects.get(id=region_id))
+            new_vacancy = Vacancies.objects.create(vacancy=name_vacancy, regions=country)
             for word_id in keywords_id:
                 new_vacancy.words.add(word_id)
 
+            return info
+
         print('END')
         print('*' * 30)
-
-        return info
-# выбор всех
-# regions = Regions.objects.all()
-# print(regions)
-# print(type(regions))
-# for item in regions:
-#     print(item)
-#     print(type(item))
-
-# выбрать одну
-# region = Regions.objects.get(region='Россия')
-# print(region)
-# print(type(region))
-
-# выбрать несколько
-# vacancies = Vacancies.objects.filter(vacancy='python developer')
-# print(vacancies)
-# print(type(vacancies))
-
-# со связями
-# vacancies = Vacancies.objects.all()[1]
-# print(vacancies)
-# print(vacancies.words.all())
-
-# создание
-# Regions.objects.create(region='Литва')
-
-# изменение
-# old_region = Regions.objects.get(region='Латвия')
-# new_region = 'oooo'
-# old_region.region = new_region
-# old_region.save()
-
-# удаление 1/несколько
-# vacancies = Regions.objects.filter(region='oooo')
-# vacancies.delete()
-
-# vacancies = Regions.objects.all()
-# vacancies.delete()
